@@ -62,9 +62,9 @@ class NormToNorm:
 
     def fit(self, n_trials=3, *args, **kwargs):
         """Fit the stochastic parameters."""
-        study = optuna.create_study(*args, **kwargs)
-        study.optimize(self.objective, n_trials=n_trials)
-        return study
+        self.study = optuna.create_study(*args, **kwargs)
+        self.study.optimize(self.objective, n_trials=n_trials)
+        return self.study
 
 
 # TODO: Real-to-classification for misclassication problems.

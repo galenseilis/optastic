@@ -48,7 +48,7 @@ class NormToNorm:
             ]
             Y_sigma = [
                 trial.suggest_float(f"y_sigma_{k}", 0.0, s)
-                for k, s in enumerate(y_max_abs_residuals)
+                for k, s in enumerate(Y_max_abs_residuals)
             ]
             Y_cov = np.outer((Y_sigma,) * 2) * Y_corr
             Y_sample = np.random.multivariate_normal(Y_mu, Y_cov, size=Y.shape[0])

@@ -37,7 +37,6 @@ class NormToNorm:
                 trial.suggest_float(f"x_sigma_{k}", 0.0, s)
                 for k, s in enumerate(X_max_square_residuals)
             ]
-            X_sigma = np.array(X_sigma)
             X_cov = np.outer((X_sigma,) * 2) * X_corr
             X_sample = np.random.multivariate_normal(X_mu, X_cov, size=X.shape[0])
 
@@ -51,7 +50,6 @@ class NormToNorm:
                 trial.suggest_float(f"y_sigma_{k}", 0.0, s)
                 for k, s in enumerate(y_max_square_residuals)
             ]
-            Y_sigma = np.array(Y_sigma)
             Y_cov = np.outer((Y_sigma,) * 2) * Y_corr
             Y_sample = np.random.multivariate_normal(Y_mu, Y_cov, size=Y.shape[0])
 

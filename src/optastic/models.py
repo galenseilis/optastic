@@ -64,8 +64,13 @@ class NormToNorm:
         """Fit the stochastic parameters."""
         self.study = optuna.create_study(*args, **kwargs)
         self.study.optimize(self.objective, n_trials=n_trials)
+        # TODO: save the best params instead of whole study
+        # for use later in predict method.
         return self.study
 
+    def predict(self, X):
+        '''Probabilistic prediction.'''
+        ...
 
 # TODO: Real-to-classification for misclassication problems.
 # TODO: Real-to-non-negative integer regression for count data

@@ -18,13 +18,13 @@ class NormToNorm:
         X_residual = X - X_mean
         X_min_residual = np.min(X_residual, axis=0)
         X_max_residual = np.max(X_residual, axis=0)
-        X_max_square_residuals = np.max(np.square(X_residual), axis=0)
+        X_max_abs_residuals = np.max(np.abs(X_residual), axis=0)
 
         Y_mean = np.mean(Y, axis=0)
         Y_residual = Y - Y_mean
         Y_min_residual = np.min(Y_residual, axis=0)
         Y_max_residual = np.max(Y_residual, axis=0)
-        Y_max_square_residuals = np.max(np.square(Y_residual), axis=0)
+        Y_max_abs_residuals = np.max(np.abs(Y_residual), axis=0)
 
         def objective(trial):
             # Sample input error distribution
@@ -35,7 +35,7 @@ class NormToNorm:
             ]
             X_sigma = [
                 trial.suggest_float(f"x_sigma_{k}", 0.0, s)
-                for k, s in enumerate(X_max_square_residuals)
+                for k, s in enumerate(X_max_abs_residuals)
             ]
             X_cov = np.outer((X_sigma,) * 2) * X_corr
             X_sample = np.random.multivariate_normal(X_mu, X_cov, size=X.shape[0])
@@ -48,7 +48,7 @@ class NormToNorm:
             ]
             Y_sigma = [
                 trial.suggest_float(f"y_sigma_{k}", 0.0, s)
-                for k, s in enumerate(y_max_square_residuals)
+                for k, s in enumerate(y_max_abs_residuals)
             ]
             Y_cov = np.outer((Y_sigma,) * 2) * Y_corr
             Y_sample = np.random.multivariate_normal(Y_mu, Y_cov, size=Y.shape[0])

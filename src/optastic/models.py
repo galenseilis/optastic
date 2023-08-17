@@ -1,10 +1,12 @@
 import numpy as np
 import optuna
+from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.utils.validation import check_array, check_is_fitted
 
 import suggestions
 
 
-class NormToNorm:
+class NormToNorm(BaseEstimator, RegressorMixin):
     """IO multivariate Gaussian uncertainty."""
 
     def __init__(self, model, X, Y, loss):
@@ -72,7 +74,7 @@ class NormToNorm:
 
         self.objective = objective
 
-    def fit(self, n_trials=3, *args, **kwargs):
+    def fit(self, X, y=None, n_trials=3, *args, **kwargs):
         """Fit the stochastic parameters.
 
         PARAMETERS
@@ -80,11 +82,13 @@ class NormToNorm:
         n_trials: int
             Number of iterations Optuna will take to fit the distributions.
         """
+        X = check_array(X)
+        self.n_features_in_ = X.shape[1]
         self.study = optuna.create_study(*args, **kwargs)
         self.study.optimize(self.objective, n_trials=n_trials)
         # TODO: save the best params instead of whole study
         # for use later in predict method.
-        return self.study
+        return self
 
     def predict(self, X):
         '''Probabilistic prediction.'''

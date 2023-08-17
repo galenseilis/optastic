@@ -27,6 +27,18 @@ class NormToNorm:
         Y_max_abs_residuals = np.max(np.abs(Y_residual), axis=0)
 
         def objective(trial):
+            '''Optimization bjective for fitting the model.
+
+            PARAMETERS
+            ----------
+            trial: optuna.trial.Trial
+                Optuna trial object.
+
+            RETURNS
+            -------
+            : float
+                Estimated loss.
+            '''
             # Sample input error distribution
             X_corr = suggestions.suggest_corr(trial, "x_corr", X.shape[1])
             X_mu = [
@@ -61,7 +73,13 @@ class NormToNorm:
         self.objective = objective
 
     def fit(self, n_trials=3, *args, **kwargs):
-        """Fit the stochastic parameters."""
+        """Fit the stochastic parameters.
+
+        PARAMETERS
+        ----------
+        n_trials: int
+            Number of iterations Optuna will take to fit the distributions.
+        """
         self.study = optuna.create_study(*args, **kwargs)
         self.study.optimize(self.objective, n_trials=n_trials)
         # TODO: save the best params instead of whole study
